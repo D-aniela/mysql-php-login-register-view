@@ -23,22 +23,43 @@ if (isset($_POST['register'])) {
 	$Nombre_Usuario = $_POST['Nombre_Usuario'];
 	$Tipo_usuario = 'E';
 	$Password = $_POST['Password'];
+	$apellidoPaterno = $_POST['apellidoPaterno'];
+	$apellidoMaterno = $_POST['apellidoMaterno'];
 
 	if ($ID_USUARIO == '')
-		$errMsg = 'Enter your ID_USUARIO';
+		$errMsg = 'Ingresa tu Id de usuario';
 	if ($Nombre_Usuario == '')
-		$errMsg = 'Enter Nombre_Usuario';
+		$errMsg = 'Ingresa tu nombre';
 	if ($Tipo_usuario == '')
-		$errMsg = 'Enter Tipo_usuario';
+		$errMsg = 'Ingresa tu tipo de usuario';
 	if ($Password == '')
-		$errMsg = 'Enter a sercret pin number';
+		$errMsg = 'Ingresa tu contraseña';
+	if ($apellidoPaterno == '')
+		$errMsg = 'Ingresa tu apellido paterno';
+	if ($apellidoMaterno == '')
+		$errMsg = 'Ingresa tu apellido materno';
 
 	if ($errMsg == '') {
 		try {
-			$stmt = $connect->prepare('INSERT INTO usuarios (ID_USUARIO, Nombre_Usuario, Tipo_usuario, Password) VALUES (:ID_USUARIO, :Nombre_Usuario, :Tipo_usuario, :Password)');
+			$stmt = $connect->prepare('INSERT INTO usuarios 
+			(ID_USUARIO, 
+			Nombre_Usuario, 
+			apellidoPaterno, 
+			apellidoMaterno, 
+			Tipo_usuario, 
+			Password) 
+			VALUES (:ID_USUARIO, 
+			:Nombre_Usuario, 
+			:apellidoPaterno,
+			:apellidoMaterno,
+			:Tipo_usuario, 
+			:Password)');
+
 			$stmt->execute(array(
 				':ID_USUARIO' => $ID_USUARIO,
 				':Nombre_Usuario' => $Nombre_Usuario,
+				':apellidoPaterno' => $apellidoPaterno,
+				':apellidoMaterno' => $apellidoMaterno,
 				':Tipo_usuario' => $Tipo_usuario,
 				':Password' => $Password
 			));
@@ -50,7 +71,7 @@ if (isset($_POST['register'])) {
 	}
 }
 
-if(isset($_GET['action']) && $_GET['action'] == 'joined') {
+if (isset($_GET['action']) && $_GET['action'] == 'joined') {
 	$errMsg = 'Ya está registrado, ahora puede <a href="login.php">iniciar sesión</a>';
 }
 
@@ -64,42 +85,88 @@ if(isset($_GET['action']) && $_GET['action'] == 'joined') {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles.css">
 	<title>Registrarse</title>
-
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 </head>
 
 <body>
-	<div id="navbar">
-		<ul>
-		<li><a href="./index.html">Inicio</a></li> 
-			<li><a href="./register.php">Registrarse</a></li>
-			<li><a href="./login.php">Iniciar sesión</a></li>
-		</ul>
-	</div>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">Navbar</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="./index.html">Inicio <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./register.php">Registrarse</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./login.php">Iniciar sesión</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<!-- navbar end -->
 	<?php
-				if(isset($errMsg)){
-					echo '<div style="color:#FF0000;text-align:center;font-size:17px;">'.$errMsg.'</div>';
-				}
-			?>
+	if (isset($errMsg)) {
+		echo '<div style="color:#FF0000;text-align:center;font-size:17px;">' . $errMsg . '</div>';
+	}
+	?>
 	<form action="register.php" method="post">
 		<div class="container">
-			<label for="ID_usuario"><b>ID Usuario</b></label>
-			<input type="text" name="ID_USUARIO" placeholder="Ingresar Id usuario" value="<?php if (isset($_POST['ID_USUARIO'])) echo $_POST['ID_USUARIO'] ?>" autocomplete="off" /><br /><br />
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="ID_usuario"><b>ID Usuario</b></label>
+						<input type="text" class="form-control" name="ID_USUARIO" placeholder="Ingresar Id usuario" value="<?php if (isset($_POST['ID_USUARIO'])) echo $_POST['ID_USUARIO'] ?>" autocomplete="off" /><br /><br />
+					</div>
+					<div class="col">
+						<label for="Nombre_usuario"><b>Nombre</b></label>
+						<input type="text" class="form-control" name="Nombre_Usuario" placeholder="Nombre del Usuario" value="<?php if (isset($_POST['Nombre_Usuario'])) echo $_POST['Nombre_Usuario'] ?>" autocomplete="off" /><br /><br />
+					</div>
+				</div>
+			</div>
 
-			<label for="Nombre_usuario"><b>Nombre Usuario</b></label>
-			<input type="text" name="Nombre_Usuario" placeholder="Nombre del Usuario" value="<?php if (isset($_POST['Nombre_Usuario'])) echo $_POST['Nombre_Usuario'] ?>" autocomplete="off" /><br /><br />
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="apellidoPaterno"><b>Apellido Paterno</b></label>
+						<input type="text" class="form-control" name="apellidoPaterno" placeholder="Nombre del Usuario" value="<?php if (isset($_POST['apellidoPaterno'])) echo $_POST['apellidoPaterno'] ?>" autocomplete="off" /><br /><br />
+					</div>
+					<div class="col">
+						<label for="apellidoMaterno"><b>Apellido Materno</b></label>
+						<input type="text" class="form-control" name="apellidoMaterno" placeholder="Nombre del Usuario" value="<?php if (isset($_POST['apellidoMaterno'])) echo $_POST['apellidoMaterno'] ?>" autocomplete="off" /><br /><br />
+					</div>
+				</div>
+			</div>
 
-			<label for="Tipo_usuario"><b>Tipo Usuario</b></label>
-			<input type="Tipo_usuario" name="Tipo_usuario" placeholder="Tipo_usuario" disabled value="Estudiante" /><br /><br />
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="Tipo_usuario"><b>Tipo Usuario</b></label>
+						<input type="Tipo_usuario" class="form-control" name="Tipo_usuario" placeholder="Tipo_usuario" disabled value="Estudiante" /><br /><br />
+					</div>
+				</div>
+			</div>
 
-			<label for="Password"><b>Contraseña</b></label>
-			<input id="Password" name="Password" type="password" value="<?php if (isset($_POST['Password'])) echo $_POST['Password'] ?>" autocomplete="off" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Debe tener al menos 8 carácteres' : ''); if(this.checkValidity()) form.password_two.pattern = this.value;" placeholder="Contraseña" required>
-
-			<label for="psw"><b>Confirmar Contraseña</b></label>
-			<input id="password_two" name="password_two" type="password" pattern="^\S{8,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Introduzca la misma contraseña de arriba' : '');" placeholder="Confirmar contraseña" required>
-
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="Password"><b>Contraseña</b></label>
+						<input id="Password" class="form-control" name="Password" type="password" value="<?php if (isset($_POST['Password'])) echo $_POST['Password'] ?>" autocomplete="off" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Debe tener al menos 8 carácteres' : ''); if(this.checkValidity()) form.password_two.pattern = this.value;" placeholder="Contraseña" required>
+					</div>
+					<div class="col">
+						<label for="psw"><b>Confirmar Contraseña</b></label>
+						<input id="password_two" class="form-control" name="password_two" type="password" pattern="^\S{8,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Introduzca la misma contraseña de arriba' : '');" placeholder="Confirmar contraseña" required>
+					</div>
+				</div>
+			</div>
 			<span id="message2" style="color:red"> </span> <br><br>
 
-			<input type="submit" name='register' value="Register" class='submit'>Registrarse</button>
+			<button class="btn btn-primary" type="submit" class="form-control" name='register' value="Register" class='submit'>Registrarse</button>
 
 		</div>
 

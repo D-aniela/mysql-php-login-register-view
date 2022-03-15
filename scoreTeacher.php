@@ -1,6 +1,19 @@
 <?php
 require 'config.php';
+if ($_SESSION['Nombre_usuario']) {
+	$resultado = $connect->query('SELECT * FROM calificaciones');
+} else {
+	echo 'Inicie sesión para ver la información';
+}
 ?>
+
+<style>
+	td,
+	table,
+	th {
+		border: 1px solid gray !important;
+	}
+</style>
 
 <html>
 
@@ -47,10 +60,45 @@ require 'config.php';
 		echo '<div style="color:#FF0000;text-align:center;font-size:17px;">' . $errMsg . '</div>';
 	}
 	?>
-	<h1>Bienvenido
-		<?php echo $_SESSION['Nombre_usuario'];  ?>
-		<?php echo $_SESSION['apellidoPaterno']; ?>
-		<?php echo $_SESSION['apellidoMaterno']; ?>, has iniciado como "Profesor" </h1>
+	<section style="text-align: center;">
+		<h1>Calificaciones</h1>
+		<!-- TABLE CONSTRUCTION-->
+		<div class="container">
+			<table class="table" style="text-align: center; margin-left: 50%; transform:translateX(-50%)">
+				<thead>
+					<tr>
+						<th scope="col">Matrícula</th>
+						<th scope="col">Matemáticas</th>
+						<th scope="col">Español</th>
+						<th scope="col">Geografía</th>
+						<th scope="col">Historia</th>
+						<th scope="col">Biología</th>
+						<th scope="col">Química</th>
+					</tr>
+				</thead>
+				<!-- PHP CODE TO FETCH DATA FROM ROWS-->
+				<?php   // LOOP TILL END OF DATA 
+				while ($calif = $resultado->fetch(PDO::FETCH_OBJ)) {
+				?>
+					<tbody>
+						<tr>
+							<!--FETCHING DATA FROM EACH 
+                    ROW OF EVERY COLUMN-->
+							<td><?php echo $calif->matricula; ?></td>
+							<td><?php echo $calif->matematicas; ?></td>
+							<td><?php echo $calif->espanol; ?></td>
+							<td><?php echo $calif->geografia; ?></td>
+							<td><?php echo $calif->historia; ?></td>
+							<td><?php echo $calif->biologia; ?></td>
+							<td><?php echo $calif->quimica; ?></td>
+						</tr>
+					<?php
+				}
+					?>
+					</tbody>
+			</table>
+		</div>
+	</section>
 </body>
 
 </html>
